@@ -3,7 +3,7 @@
 // @description Tags the best releases on Nyaa according to https://releases.moe/ and adds a button to add to Sonarr
 // @namespace   Dattebayo13
 // @match       https://nyaa.si/*
-// @version     1.2.2
+// @version     1.0.0
 // @author      Dattebayo13
 // @icon        https://nyaa.si/static/favicon.png
 // @grant       GM_xmlhttpRequest

@@ -21,9 +21,9 @@
     return /^\/\d+\/?$/.test(location.pathname);
   }
 
-  async function fetchFilename(nyaaUrl) {
+  async function fetchFilename(url) {
     try {
-      const apiUrl = `https://releases.moe/api/collections/torrents/records?filter=(url=%22${encodeURIComponent(nyaaUrl)}%22)`;
+      const apiUrl = `https://releases.moe/api/collections/torrents/records?filter=(url=%22${encodeURIComponent(url)}%22)`;
       const resp = await fetch(apiUrl);
       const data = await resp.json();
       return data.items?.[0]?.files?.[0]?.name || null;
@@ -75,18 +75,25 @@
   async function addAitherButton(card) {
     const btnContainer = card.querySelector('.grid.grid-cols-2');
     const nyaaBtn = btnContainer?.querySelector('a[href*="nyaa.si"]');
-    if (!btnContainer || !nyaaBtn) return;
+    const ptBtn = btnContainer?.querySelector('a.pt-button');
+    if (!btnContainer || (!nyaaBtn && !ptBtn)) return;
     if (btnContainer.classList.contains('aither-processed')) return;
 
     btnContainer.classList.add('aither-processed');
 
-    const filename = await fetchFilename(nyaaBtn.href);
+    let filename;
+    if (ptBtn) {
+        filename = await fetchFilename(ptBtn.getAttribute("href"));
+    }
+    if (!filename && nyaaBtn) {
+        filename = await fetchFilename(nyaaBtn.href);
+    }
     if (!filename) return;
 
     const detailsLink = await fetchAitherLink(filename);
     if (!detailsLink) return;
 
-    const aitherBtn = createAitherButton(nyaaBtn, detailsLink);
+    const aitherBtn = createAitherButton(nyaaBtn || ptBtn, detailsLink);
     btnContainer.appendChild(aitherBtn);
   }
 

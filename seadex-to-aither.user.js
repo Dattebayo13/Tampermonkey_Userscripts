@@ -2,7 +2,7 @@
 // @name        Insert Aither Buttons on SeaDex
 // @namespace   Dattebayo13
 // @match       *://releases.moe/*
-// @version     1.0.0
+// @version     1.0.1
 // @author      Dattebayo13
 // @grant       GM_xmlhttpRequest
 // @icon        https://aither.cc/favicon/favicon.svg

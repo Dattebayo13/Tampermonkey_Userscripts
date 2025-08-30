@@ -2,7 +2,7 @@
 // @name        Insert Aither Buttons on SeaDex
 // @namespace   Dattebayo13
 // @match       *://releases.moe/*
-// @version     1.0.1
+// @version     1.0.2
 // @author      Dattebayo13
 // @grant       GM_xmlhttpRequest
 // @icon        https://aither.cc/favicon/favicon.svg
@@ -110,16 +110,17 @@
     waitForKeyElements('.rounded-xl.border.bg-card', addAitherButton, false);
   }
 
+  let lastUrl = location.href;
+
   if (isDetailPage()) {
     init();
-
-    let lastUrl = location.href;
-    new MutationObserver(() => {
-      if (location.href !== lastUrl) {
-        lastUrl = location.href;
-        if (isDetailPage()) init();
-      }
-    }).observe(document.body, { childList: true, subtree: true });
   }
+
+  new MutationObserver(() => {
+    if (location.href !== lastUrl) {
+      lastUrl = location.href;
+      if (isDetailPage()) init();
+    }
+  }).observe(document.body, { childList: true, subtree: true });
 
 })();

@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Nyaa Markdown
-// @version      1.2.3
+// @version      1.2.4
 // @description  Copy and preview markdown with proper BBCode tables
 // @author       Jimbo (modified by Dattebayo13)
 // @grant        GM_addStyle
@@ -43,15 +43,17 @@
 
             content.replace(/<tr[^>]*>([\s\S]*?)<\/tr>/gi, function(rowMatch, rowContent) {
                 let cells = [];
-                rowContent.replace(/<th[^>]*>([\s\S]*?)<\/th>/gi, function(cellMatch, cellContent) {
-                    let cleaned = cellContent.replace(/<[^>]+>/g, '').trim();
-                    cells.push('[b]' + cleaned + '[/b]');
-                    return '';
-                });
 
-                rowContent.replace(/<td[^>]*>([\s\S]*?)<\/td>/gi, function(cellMatch, cellContent) {
-                    let cleaned = cellContent.replace(/<[^>]+>/g, '').trim();
-                    cells.push(cleaned);
+                rowContent.replace(/<(th|td)[^>]*>([\s\S]*?)<\/\1>/gi, function(cellMatch, tag, cellContent) {
+                    var converter = new html2bbcode.HTML2BBCode({
+                        noheadings: true,
+                        nolist: false
+                    });
+                    let converted = converter.feed(cellContent).toString().trim();
+                    if (tag.toLowerCase() === "th") {
+                        converted = `[b]${converted}[/b]`;
+                    }
+                    cells.push(converted);
                     return '';
                 });
 
